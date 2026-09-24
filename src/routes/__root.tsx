@@ -129,13 +129,57 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+const PESTANAS = [
+  { to: "/", etiqueta: "Inicio" },
+  { to: "/movimientos", etiqueta: "Movimientos" },
+  { to: "/empleados", etiqueta: "Empleados" },
+  { to: "/sedes", etiqueta: "Sedes" },
+  { to: "/tipos", etiqueta: "Tipos" },
+] as const;
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="min-h-screen bg-background font-sans">
+        <header className="border-b border-border bg-card">
+          <div className="mx-auto flex max-w-[1600px] items-center gap-3 px-5 py-4">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-lg font-bold text-primary-foreground">
+              IT
+            </span>
+            <div>
+              <p className="font-display text-lg font-bold leading-tight text-foreground">
+                InvenTrack
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Sistema de inventario de equipos
+              </p>
+            </div>
+          </div>
+          <nav className="mx-auto flex max-w-[1600px] gap-1 overflow-x-auto px-5">
+            {PESTANAS.map((p) => (
+              <Link
+                key={p.to}
+                to={p.to}
+                activeOptions={{ exact: p.to === "/" }}
+                className="whitespace-nowrap border-b-2 border-transparent px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                activeProps={{
+                  className:
+                    "whitespace-nowrap border-b-2 border-primary px-4 py-3 text-sm font-semibold text-primary",
+                }}
+              >
+                {p.etiqueta}
+              </Link>
+            ))}
+          </nav>
+        </header>
+        <main className="mx-auto max-w-[1600px] px-5 py-8">
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </main>
+      </div>
     </QueryClientProvider>
   );
 }
+
