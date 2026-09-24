@@ -10,33 +10,73 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmpleadosRouteImport } from './routes/empleados'
+import { Route as MovimientosRouteImport } from './routes/movimientos'
+import { Route as SedesRouteImport } from './routes/sedes'
+import { Route as TiposRouteImport } from './routes/tipos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmpleadosRoute = EmpleadosRouteImport.update({
+  id: '/empleados',
+  path: '/empleados',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MovimientosRoute = MovimientosRouteImport.update({
+  id: '/movimientos',
+  path: '/movimientos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SedesRoute = SedesRouteImport.update({
+  id: '/sedes',
+  path: '/sedes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TiposRoute = TiposRouteImport.update({
+  id: '/tipos',
+  path: '/tipos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/empleados': typeof EmpleadosRoute
+  '/movimientos': typeof MovimientosRoute
+  '/sedes': typeof SedesRoute
+  '/tipos': typeof TiposRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/empleados': typeof EmpleadosRoute
+  '/movimientos': typeof MovimientosRoute
+  '/sedes': typeof SedesRoute
+  '/tipos': typeof TiposRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/empleados': typeof EmpleadosRoute
+  '/movimientos': typeof MovimientosRoute
+  '/sedes': typeof SedesRoute
+  '/tipos': typeof TiposRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
+  id: '__root__' | '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmpleadosRoute: typeof EmpleadosRoute
+  MovimientosRoute: typeof MovimientosRoute
+  SedesRoute: typeof SedesRoute
+  TiposRoute: typeof TiposRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +88,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/empleados': {
+      id: '/empleados'
+      path: '/empleados'
+      fullPath: '/empleados'
+      preLoaderRoute: typeof EmpleadosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/movimientos': {
+      id: '/movimientos'
+      path: '/movimientos'
+      fullPath: '/movimientos'
+      preLoaderRoute: typeof MovimientosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sedes': {
+      id: '/sedes'
+      path: '/sedes'
+      fullPath: '/sedes'
+      preLoaderRoute: typeof SedesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tipos': {
+      id: '/tipos'
+      path: '/tipos'
+      fullPath: '/tipos'
+      preLoaderRoute: typeof TiposRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmpleadosRoute: EmpleadosRoute,
+  MovimientosRoute: MovimientosRoute,
+  SedesRoute: SedesRoute,
+  TiposRoute: TiposRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
