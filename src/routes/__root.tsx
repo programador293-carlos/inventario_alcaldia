@@ -134,6 +134,8 @@ const PESTANAS = [
   { to: "/movimientos", etiqueta: "Movimientos" },
   { to: "/empleados", etiqueta: "Empleados" },
   { to: "/sedes", etiqueta: "Sedes" },
+  { to: "/organismos", etiqueta: "Organismos" },
+  { to: "/areas", etiqueta: "Áreas" },
   { to: "/tipos", etiqueta: "Tipos" },
 ] as const;
 
