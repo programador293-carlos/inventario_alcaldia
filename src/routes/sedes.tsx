@@ -15,7 +15,6 @@ import {
   SEDES_INICIALES,
   siguienteId,
   useTablaLocal,
-  type Organismo,
   type Sede,
 } from "@/lib/inventario";
 
@@ -23,23 +22,18 @@ export const Route = createFileRoute("/sedes")({
   head: () => ({
     meta: [
       { title: "Sedes — InvenTrack" },
-      { name: "description", content: "Administra las sedes, organismos y áreas del inventario." },
+      { name: "description", content: "Administra las sedes físicas donde se ubican los equipos." },
       { property: "og:title", content: "Sedes — InvenTrack" },
       {
         property: "og:description",
-        content: "Administra las sedes, organismos y áreas del inventario.",
+        content: "Administra las sedes físicas donde se ubican los equipos.",
       },
     ],
   }),
   component: PaginaSedes,
 });
 
-const vacio = (): Omit<Sede, "id"> => ({
-  nombre_sede: "",
-  direccion: "",
-  organismo: "SVSH",
-  area: "",
-});
+const vacio = (): Omit<Sede, "id"> => ({ nombre_sede: "", direccion: "" });
 
 function PaginaSedes() {
   const sedes = useTablaLocal<Sede>(CLAVES.sedes, SEDES_INICIALES);
@@ -84,7 +78,7 @@ function PaginaSedes() {
           <table className="w-full min-w-[800px] border-collapse text-sm">
             <thead>
               <tr className="bg-secondary text-left">
-                {["ID", "Nombre", "Dirección", "Organismo", "Área", "Acciones"].map((c) => (
+                {["ID", "Nombre", "Dirección", "Acciones"].map((c) => (
                   <th
                     key={c}
                     className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
@@ -100,8 +94,6 @@ function PaginaSedes() {
                   <td className="px-4 py-3">{s.id}</td>
                   <td className="px-4 py-3 font-medium">{s.nombre_sede}</td>
                   <td className="px-4 py-3 text-muted-foreground">{s.direccion}</td>
-                  <td className="px-4 py-3">{s.organismo}</td>
-                  <td className="px-4 py-3">{s.area}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <button
@@ -155,25 +147,6 @@ function PaginaSedes() {
               className={claseInput}
               value={form.direccion}
               onChange={(e) => setForm({ ...form, direccion: e.target.value })}
-            />
-          </Campo>
-          <Campo etiqueta="Organismo">
-            <select
-              className={claseInput}
-              value={form.organismo}
-              onChange={(e) =>
-                setForm({ ...form, organismo: e.target.value as Organismo })
-              }
-            >
-              <option value="SVSH">SVSH</option>
-              <option value="FEV">FEV</option>
-            </select>
-          </Campo>
-          <Campo etiqueta="Área">
-            <input
-              className={claseInput}
-              value={form.area}
-              onChange={(e) => setForm({ ...form, area: e.target.value })}
             />
           </Campo>
           <div className="flex justify-end gap-2 sm:col-span-2">

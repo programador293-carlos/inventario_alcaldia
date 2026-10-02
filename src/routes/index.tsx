@@ -458,7 +458,7 @@ function PaginaInicio() {
             <select
               required
               className={claseInput}
-              value={form.organismo_id}
+              value={form.organismo_id || ""}
               onChange={(e) =>
                 setForm({ ...form, organismo_id: Number(e.target.value) })
               }
@@ -475,7 +475,7 @@ function PaginaInicio() {
             <select
               required
               className={claseInput}
-              value={form.area_id}
+              value={form.area_id || ""}
               onChange={(e) =>
                 setForm({ ...form, area_id: Number(e.target.value) })
               }
