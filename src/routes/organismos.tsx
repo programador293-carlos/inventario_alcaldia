@@ -12,46 +12,49 @@ import {
 import { Notificacion } from "@/components/inventario/Notificacion";
 import {
   CLAVES,
-  SEDES_INICIALES,
+  ORGANISMOS_INICIALES,
   siguienteId,
   useTablaLocal,
-  type Sede,
+  type OrganismoEntidad,
 } from "@/lib/inventario";
 
-export const Route = createFileRoute("/sedes")({
+export const Route = createFileRoute("/organismos")({
   head: () => ({
     meta: [
-      { title: "Sedes — InvenTrack" },
-      { name: "description", content: "Administra las sedes físicas donde se ubican los equipos." },
-      { property: "og:title", content: "Sedes — InvenTrack" },
+      { title: "Organismos — InvenTrack" },
+      {
+        name: "description",
+        content: "Organismos que comparten las sedes, como SVSH y FEV.",
+      },
+      { property: "og:title", content: "Organismos — InvenTrack" },
       {
         property: "og:description",
-        content: "Administra las sedes físicas donde se ubican los equipos.",
+        content: "Organismos que comparten las sedes, como SVSH y FEV.",
       },
     ],
   }),
-  component: PaginaSedes,
+  component: PaginaOrganismos,
 });
 
-const vacio = (): Omit<Sede, "id"> => ({ nombre_sede: "", direccion: "" });
+const vacio = (): Omit<OrganismoEntidad, "id"> => ({ sigla: "", nombre: "" });
 
-function PaginaSedes() {
-  const sedes = useTablaLocal<Sede>(CLAVES.sedes, SEDES_INICIALES);
+function PaginaOrganismos() {
+  const tipos = useTablaLocal<OrganismoEntidad>(CLAVES.organismos, ORGANISMOS_INICIALES);
   const [abierto, setAbierto] = useState(false);
   const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [form, setForm] = useState<Omit<Sede, "id">>(vacio());
+  const [form, setForm] = useState<Omit<OrganismoEntidad, "id">>(vacio());
   const [aviso, setAviso] = useState<string | null>(null);
 
   function guardar(e: React.FormEvent) {
     e.preventDefault();
     if (editandoId === null) {
-      sedes.guardar([...sedes.datos, { id: siguienteId(sedes.datos), ...form }]);
-      setAviso("Sede creada correctamente");
+      tipos.guardar([...tipos.datos, { id: siguienteId(tipos.datos), ...form }]);
+      setAviso("Organismo creado correctamente");
     } else {
-      sedes.guardar(
-        sedes.datos.map((s) => (s.id === editandoId ? { id: editandoId, ...form } : s)),
+      tipos.guardar(
+        tipos.datos.map((t) => (t.id === editandoId ? { id: editandoId, ...form } : t)),
       );
-      setAviso("Sede actualizada correctamente");
+      setAviso("Organismo actualizado correctamente");
     }
     setAbierto(false);
   }
@@ -59,8 +62,8 @@ function PaginaSedes() {
   return (
     <>
       <EncabezadoPagina
-        titulo="Sedes"
-        descripcion={`${sedes.datos.length} sedes registradas`}
+        titulo="Organismos"
+        descripcion={`${tipos.datos.length} organismos registrados`}
         accion={
           <BotonPrimario
             onClick={() => {
@@ -69,16 +72,16 @@ function PaginaSedes() {
               setAbierto(true);
             }}
           >
-            ➕ Nueva Sede
+            ➕ Nuevo Organismo
           </BotonPrimario>
         }
       />
       <Tarjeta>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] border-collapse text-sm">
+          <table className="w-full min-w-[600px] border-collapse text-sm">
             <thead>
               <tr className="bg-secondary text-left">
-                {["ID", "Nombre", "Dirección", "Acciones"].map((c) => (
+                {["ID", "Sigla", "Nombre", "Acciones"].map((c) => (
                   <th
                     key={c}
                     className="whitespace-nowrap px-4 py-3 text-xs font-semibold uppercase tracking-wide text-secondary-foreground"
@@ -89,18 +92,18 @@ function PaginaSedes() {
               </tr>
             </thead>
             <tbody>
-              {sedes.datos.map((s) => (
-                <tr key={s.id} className="border-t border-border hover:bg-muted/60">
-                  <td className="px-4 py-3">{s.id}</td>
-                  <td className="px-4 py-3 font-medium">{s.nombre_sede}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{s.direccion}</td>
+              {tipos.datos.map((t) => (
+                <tr key={t.id} className="border-t border-border hover:bg-muted/60">
+                  <td className="px-4 py-3">{t.id}</td>
+                  <td className="px-4 py-3 font-medium">{t.sigla}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{t.nombre}</td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <button
                         title="Editar"
                         className="rounded-md px-2 py-1 hover:bg-accent"
                         onClick={() => {
-                          const { id, ...resto } = s;
+                          const { id, ...resto } = t;
                           setEditandoId(id);
                           setForm(resto);
                           setAbierto(true);
@@ -112,9 +115,9 @@ function PaginaSedes() {
                         title="Eliminar"
                         className="rounded-md px-2 py-1 hover:bg-destructive/10"
                         onClick={() => {
-                          if (!window.confirm(`¿Eliminar la sede ${s.nombre_sede}?`)) return;
-                          sedes.guardar(sedes.datos.filter((x) => x.id !== s.id));
-                          setAviso("Sede eliminada");
+                          if (!window.confirm(`¿Eliminar el organismo ${t.sigla}?`)) return;
+                          tipos.guardar(tipos.datos.filter((x) => x.id !== t.id));
+                          setAviso("Organismo eliminado");
                         }}
                       >
                         🗑️
@@ -130,26 +133,27 @@ function PaginaSedes() {
 
       <Modal
         abierto={abierto}
-        titulo={editandoId === null ? "Nueva Sede" : "Editar Sede"}
+        titulo={editandoId === null ? "Nuevo Organismo" : "Editar Organismo"}
         onCerrar={() => setAbierto(false)}
       >
-        <form onSubmit={guardar} className="grid gap-4 sm:grid-cols-2">
-          <Campo etiqueta="Nombre de la sede">
+        <form onSubmit={guardar} className="grid gap-4">
+          <Campo etiqueta="Sigla">
             <input
               required
               className={claseInput}
-              value={form.nombre_sede}
-              onChange={(e) => setForm({ ...form, nombre_sede: e.target.value })}
+              value={form.sigla}
+              onChange={(e) => setForm({ ...form, sigla: e.target.value })}
             />
           </Campo>
-          <Campo etiqueta="Dirección">
+          <Campo etiqueta="Nombre completo">
             <input
+              required
               className={claseInput}
-              value={form.direccion}
-              onChange={(e) => setForm({ ...form, direccion: e.target.value })}
+              value={form.nombre}
+              onChange={(e) => setForm({ ...form, nombre: e.target.value })}
             />
           </Campo>
-          <div className="flex justify-end gap-2 sm:col-span-2">
+          <div className="flex justify-end gap-2">
             <BotonSecundario type="button" onClick={() => setAbierto(false)}>
               Cancelar
             </BotonSecundario>

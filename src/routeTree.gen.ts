@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AreasRouteImport } from './routes/areas'
 import { Route as EmpleadosRouteImport } from './routes/empleados'
 import { Route as MovimientosRouteImport } from './routes/movimientos'
+import { Route as OrganismosRouteImport } from './routes/organismos'
 import { Route as SedesRouteImport } from './routes/sedes'
 import { Route as TiposRouteImport } from './routes/tipos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AreasRoute = AreasRouteImport.update({
+  id: '/areas',
+  path: '/areas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmpleadosRoute = EmpleadosRouteImport.update({
@@ -28,6 +35,11 @@ const EmpleadosRoute = EmpleadosRouteImport.update({
 const MovimientosRoute = MovimientosRouteImport.update({
   id: '/movimientos',
   path: '/movimientos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrganismosRoute = OrganismosRouteImport.update({
+  id: '/organismos',
+  path: '/organismos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SedesRoute = SedesRouteImport.update({
@@ -43,38 +55,68 @@ const TiposRoute = TiposRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
+  fullPaths:
+    | '/'
+    | '/areas'
+    | '/empleados'
+    | '/movimientos'
+    | '/organismos'
+    | '/sedes'
+    | '/tipos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
-  id: '__root__' | '/' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
+  to:
+    | '/'
+    | '/areas'
+    | '/empleados'
+    | '/movimientos'
+    | '/organismos'
+    | '/sedes'
+    | '/tipos'
+  id:
+    | '__root__'
+    | '/'
+    | '/areas'
+    | '/empleados'
+    | '/movimientos'
+    | '/organismos'
+    | '/sedes'
+    | '/tipos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AreasRoute: typeof AreasRoute
   EmpleadosRoute: typeof EmpleadosRoute
   MovimientosRoute: typeof MovimientosRoute
+  OrganismosRoute: typeof OrganismosRoute
   SedesRoute: typeof SedesRoute
   TiposRoute: typeof TiposRoute
 }
@@ -86,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/areas': {
+      id: '/areas'
+      path: '/areas'
+      fullPath: '/areas'
+      preLoaderRoute: typeof AreasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/empleados': {
@@ -100,6 +149,13 @@ declare module '@tanstack/react-router' {
       path: '/movimientos'
       fullPath: '/movimientos'
       preLoaderRoute: typeof MovimientosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/organismos': {
+      id: '/organismos'
+      path: '/organismos'
+      fullPath: '/organismos'
+      preLoaderRoute: typeof OrganismosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sedes': {
@@ -121,8 +177,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AreasRoute: AreasRoute,
   EmpleadosRoute: EmpleadosRoute,
   MovimientosRoute: MovimientosRoute,
+  OrganismosRoute: OrganismosRoute,
   SedesRoute: SedesRoute,
   TiposRoute: TiposRoute,
 }
