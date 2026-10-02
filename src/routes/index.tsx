@@ -19,6 +19,10 @@ import {
   PRODUCTOS_INICIALES,
   SEDES_INICIALES,
   TIPOS_INICIALES,
+  ORGANISMOS_INICIALES,
+  AREAS_INICIALES,
+  type OrganismoEntidad,
+  type Area,
   hoy,
   siguienteId,
   useTablaLocal,
@@ -79,6 +83,8 @@ const productoVacio = (): Omit<Producto, "id"> => ({
   usuario_responsable_id: 0,
   usuario_actual_id: 0,
   sede_id: 0,
+  organismo_id: 0,
+  area_id: 0,
   ultimo_movimiento: hoy(),
   estado: "bueno",
   ram: "",
@@ -92,6 +98,11 @@ function PaginaInicio() {
   const sedes = useTablaLocal<Sede>(CLAVES.sedes, SEDES_INICIALES);
   const empleados = useTablaLocal<Empleado>(CLAVES.empleados, EMPLEADOS_INICIALES);
   const tipos = useTablaLocal<TipoProducto>(CLAVES.tipos, TIPOS_INICIALES);
+  const organismos = useTablaLocal<OrganismoEntidad>(
+    CLAVES.organismos,
+    ORGANISMOS_INICIALES,
+  );
+  const areas = useTablaLocal<Area>(CLAVES.areas, AREAS_INICIALES);
   const movimientos = useTablaLocal<Movimiento>(
     CLAVES.movimientos,
     MOVIMIENTOS_INICIALES,
@@ -114,8 +125,10 @@ function PaginaInicio() {
 
   const nombreSede = (id: number) =>
     sedes.datos.find((s) => s.id === id)?.nombre_sede ?? "—";
-  const datoSede = (id: number, campo: "organismo" | "area") =>
-    sedes.datos.find((s) => s.id === id)?.[campo] ?? "—";
+  const nombreOrganismo = (id: number) =>
+    organismos.datos.find((o) => o.id === id)?.sigla ?? "—";
+  const nombreArea = (id: number) =>
+    areas.datos.find((a) => a.id === id)?.nombre ?? "—";
   const nombreEmpleado = (id: number) =>
     empleados.datos.find((e) => e.id === id)?.nombre_completo ?? "—";
   const nombreTipo = (id: number) =>
@@ -133,6 +146,8 @@ function PaginaInicio() {
         p.observaciones,
         nombreTipo(p.tipo_producto_id),
         nombreSede(p.sede_id),
+        nombreOrganismo(p.organismo_id),
+        nombreArea(p.area_id),
         nombreEmpleado(p.usuario_actual_id),
         nombreEmpleado(p.usuario_responsable_id),
       ]
@@ -141,7 +156,7 @@ function PaginaInicio() {
         .includes(q),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [busqueda, productos.datos, sedes.datos, empleados.datos, tipos.datos]);
+  }, [busqueda, productos.datos, sedes.datos, empleados.datos, tipos.datos, organismos.datos, areas.datos]);
 
   function abrirNuevo() {
     setEditandoId(null);
@@ -272,10 +287,10 @@ function PaginaInicio() {
                     {nombreSede(p.sede_id)}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
-                    {datoSede(p.sede_id, "organismo")}
+                    {nombreOrganismo(p.organismo_id)}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
-                    {datoSede(p.sede_id, "area")}
+                    {nombreArea(p.area_id)}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3">
                     {nombreEmpleado(p.usuario_responsable_id)}
@@ -435,6 +450,40 @@ function PaginaInicio() {
               {sedes.datos.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.nombre_sede}
+                </option>
+              ))}
+            </select>
+          </Campo>
+          <Campo etiqueta="Organismo">
+            <select
+              required
+              className={claseInput}
+              value={form.organismo_id}
+              onChange={(e) =>
+                setForm({ ...form, organismo_id: Number(e.target.value) })
+              }
+            >
+              <option value="">Seleccione…</option>
+              {organismos.datos.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.sigla} — {o.nombre}
+                </option>
+              ))}
+            </select>
+          </Campo>
+          <Campo etiqueta="Área">
+            <select
+              required
+              className={claseInput}
+              value={form.area_id}
+              onChange={(e) =>
+                setForm({ ...form, area_id: Number(e.target.value) })
+              }
+            >
+              <option value="">Seleccione…</option>
+              {areas.datos.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.nombre}
                 </option>
               ))}
             </select>
