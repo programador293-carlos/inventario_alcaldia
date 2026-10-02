@@ -14,8 +14,18 @@ export interface Sede {
   id: number;
   nombre_sede: string;
   direccion: string;
-  organismo: Organismo;
-  area: string;
+}
+
+export interface OrganismoEntidad {
+  id: number;
+  sigla: string;
+  nombre: string;
+}
+
+export interface Area {
+  id: number;
+  nombre: string;
+  descripcion: string;
 }
 
 export interface Empleado {
@@ -44,6 +54,8 @@ export interface Producto {
   usuario_responsable_id: number;
   usuario_actual_id: number;
   sede_id: number;
+  organismo_id: number;
+  area_id: number;
   ultimo_movimiento: string;
   estado: EstadoProducto;
   ram: string;
@@ -64,10 +76,12 @@ export interface Movimiento {
   fecha: string;
 }
 
-const PREFIJO = "inventario_";
+const PREFIJO = "inventario_v2_";
 
 export const CLAVES = {
   sedes: PREFIJO + "sedes",
+  organismos: PREFIJO + "organismos",
+  areas: PREFIJO + "areas",
   empleados: PREFIJO + "empleados",
   tipos: PREFIJO + "tipos_producto",
   productos: PREFIJO + "productos",
@@ -75,28 +89,22 @@ export const CLAVES = {
 } as const;
 
 export const SEDES_INICIALES: Sede[] = [
-  {
-    id: 1,
-    nombre_sede: "Sede Central",
-    direccion: "Calle 10 # 5-32",
-    organismo: "SVSH",
-    area: "Administrativa",
-  },
-  {
-    id: 2,
-    nombre_sede: "Sede Norte",
-    direccion: "Av. Siempre Viva 120",
-    organismo: "FEV",
-    area: "Operaciones",
-  },
-  {
-    id: 3,
-    nombre_sede: "Bodega Sur",
-    direccion: "Km 3 Vía Sur",
-    organismo: "SVSH",
-    area: "Logística",
-  },
+  { id: 1, nombre_sede: "Sede Central", direccion: "Calle 10 # 5-32" },
+  { id: 2, nombre_sede: "Sede Norte", direccion: "Av. Siempre Viva 120" },
+  { id: 3, nombre_sede: "Bodega Sur", direccion: "Km 3 Vía Sur" },
 ];
+
+export const ORGANISMOS_INICIALES: OrganismoEntidad[] = [
+  { id: 1, sigla: "SVSH", nombre: "Secretaría de Vivienda Social y Hábitat" },
+  { id: 2, sigla: "FEV", nombre: "Fondo Especial de Vivienda" },
+];
+
+export const AREAS_INICIALES: Area[] = [
+  { id: 1, nombre: "Administrativa", descripcion: "Gestión administrativa" },
+  { id: 2, nombre: "Operaciones", descripcion: "Operación y campo" },
+  { id: 3, nombre: "Logística", descripcion: "Almacén y distribución" },
+];
+
 
 export const EMPLEADOS_INICIALES: Empleado[] = [
   {
