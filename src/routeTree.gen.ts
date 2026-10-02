@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AreasRouteImport } from './routes/areas'
 import { Route as EmpleadosRouteImport } from './routes/empleados'
 import { Route as MovimientosRouteImport } from './routes/movimientos'
+import { Route as OrganismosRouteImport } from './routes/organismos'
 import { Route as SedesRouteImport } from './routes/sedes'
 import { Route as TiposRouteImport } from './routes/tipos'
 
@@ -36,6 +37,11 @@ const MovimientosRoute = MovimientosRouteImport.update({
   path: '/movimientos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrganismosRoute = OrganismosRouteImport.update({
+  id: '/organismos',
+  path: '/organismos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SedesRoute = SedesRouteImport.update({
   id: '/sedes',
   path: '/sedes',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
@@ -69,21 +77,36 @@ export interface FileRoutesById {
   '/areas': typeof AreasRoute
   '/empleados': typeof EmpleadosRoute
   '/movimientos': typeof MovimientosRoute
+  '/organismos': typeof OrganismosRoute
   '/sedes': typeof SedesRoute
   '/tipos': typeof TiposRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/areas' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
+    | '/'
+    | '/areas'
+    | '/empleados'
+    | '/movimientos'
+    | '/organismos'
+    | '/sedes'
+    | '/tipos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/areas' | '/empleados' | '/movimientos' | '/sedes' | '/tipos'
+  to:
+    | '/'
+    | '/areas'
+    | '/empleados'
+    | '/movimientos'
+    | '/organismos'
+    | '/sedes'
+    | '/tipos'
   id:
     | '__root__'
     | '/'
     | '/areas'
     | '/empleados'
     | '/movimientos'
+    | '/organismos'
     | '/sedes'
     | '/tipos'
   fileRoutesById: FileRoutesById
@@ -93,6 +116,7 @@ export interface RootRouteChildren {
   AreasRoute: typeof AreasRoute
   EmpleadosRoute: typeof EmpleadosRoute
   MovimientosRoute: typeof MovimientosRoute
+  OrganismosRoute: typeof OrganismosRoute
   SedesRoute: typeof SedesRoute
   TiposRoute: typeof TiposRoute
 }
@@ -127,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MovimientosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/organismos': {
+      id: '/organismos'
+      path: '/organismos'
+      fullPath: '/organismos'
+      preLoaderRoute: typeof OrganismosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sedes': {
       id: '/sedes'
       path: '/sedes'
@@ -149,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AreasRoute: AreasRoute,
   EmpleadosRoute: EmpleadosRoute,
   MovimientosRoute: MovimientosRoute,
+  OrganismosRoute: OrganismosRoute,
   SedesRoute: SedesRoute,
   TiposRoute: TiposRoute,
 }
